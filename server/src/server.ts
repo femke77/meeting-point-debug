@@ -79,6 +79,10 @@ const startApolloServer = async () => {
       const { connectionParams } = ctx;
       if (connectionParams && connectionParams.Authorization) {
         const token = (connectionParams.Authorization as string).replace("Bearer ", "").trim();
+        if (!token) {
+          console.log("Missing token for WebSocket connection");
+          throw new Error("Unauthorized");
+        }
         try {
           const { data }: any = jwt.verify(token,  process.env.JWT_SECRET_KEY || "MySecret", {
             maxAge: "2hr",
