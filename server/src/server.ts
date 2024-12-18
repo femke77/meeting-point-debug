@@ -81,7 +81,7 @@ const startApolloServer = async () => {
         const token = (connectionParams.Authorization as string).replace("Bearer ", "").trim();
         if (!token) {
           console.log("Missing token for WebSocket connection");
-          throw new Error("Unauthorized");
+          return { pubsub };  // Proceed with an empty context
         }
         try {
           const { data }: any = jwt.verify(token,  process.env.JWT_SECRET_KEY || "MySecret", {
