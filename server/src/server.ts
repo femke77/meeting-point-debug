@@ -42,6 +42,15 @@ const startApolloServer = async () => {
     origin: 'https://mingle-point-debug.onrender.com', 
     credentials: true,
   }));
+  app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Allow-Origin', '*'); // Update as needed
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  });
 
   server.applyMiddleware({ app: app as unknown as ExpressContext['req']['app'], path: '/graphql' });
 
