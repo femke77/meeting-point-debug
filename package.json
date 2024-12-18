@@ -18,7 +18,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "wscat": "^6.0.1"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.16",
