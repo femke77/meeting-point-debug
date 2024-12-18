@@ -15,7 +15,7 @@ const getToken = async () => {
 
 // Create an HTTP link for queries and mutations
 const httpLink = new HttpLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: 'https://mingle-point-debug.onrender.com/graphql',
 });
 
 const authLink = setContext(async (_, { headers = {} }: { headers?: Record<string, string> }) => {
