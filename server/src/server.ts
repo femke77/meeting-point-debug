@@ -41,6 +41,7 @@ const startApolloServer = async () => {
   app.use(cors({
     origin: 'https://mingle-point-debug.onrender.com', 
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }));
   app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {

@@ -29,7 +29,7 @@ const authLink = setContext(async (_, { headers = {} }: { headers?: Record<strin
 });
 // Create a WebSocket link for subscriptions
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:3001/graphql',
+  url: 'ws://mingle-point-debug.onrender.com/graphql',
   connectionParams: async () => {
     const token = await getToken(); 
     return {
