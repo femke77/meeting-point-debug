@@ -74,39 +74,24 @@ const startApolloServer = async () => {
     headers.push('Access-Control-Allow-Origin: https://mingle-point-debug.onrender.com');
     headers.push('Access-Control-Allow-Credentials: true');
   });
-  useServer({
-    schema,
+  useServer({ schema,
     context: async (ctx) => {
-      console.log('WebSocket connection received');
       const { connectionParams } = ctx;
       if (connectionParams && connectionParams.Authorization) {
         const token = (connectionParams.Authorization as string).replace("Bearer ", "").trim();
-        if (!token) {
-          console.log("Missing token for WebSocket connection");
-          return { pubsub };  // Proceed with an empty context
-        }
+        
         try {
-          const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || "MySecret", {
+          const { data }: any = jwt.verify(token,  process.env.JWT_SECRET_KEY || "MySecret", {
             maxAge: "2hr",
           });
-          console.log("Token verified, user:", data);
           return { user: data, pubsub };
         } catch (err) {
           console.log("Invalid token for subscription:", err);
-          return { pubsub };  // Proceed with an empty context even for invalid token
         }
       }
-      console.log("No Authorization header found");
       return { pubsub };
     },
-  }, wsServer);
-  
-  wsServer.on('headers', (headers, _request) => {
-    console.log('Setting WebSocket headers:', headers);
-    headers.push('Access-Control-Allow-Origin: https://mingle-point-debug.onrender.com');
-    headers.push('Access-Control-Allow-Credentials: true');
-  });
-  
+  }, wsServer)
 
   httpServer.listen({ port: PORT }, () => {
     console.log(`Server is now running on http://localhost:${PORT}/graphql`);
