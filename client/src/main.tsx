@@ -15,7 +15,7 @@ const getToken = async () => {
 
 // Create an HTTP link for queries and mutations
 const httpLink = new HttpLink({
-  uri: 'https://mingle-point-debug.onrender.com/graphql',
+  uri: 'https://meeting-point-debug.onrender.com/graphql',
 });
 
 const authLink = setContext(async (_, { headers = {} }: { headers?: Record<string, string> }) => {
@@ -29,7 +29,7 @@ const authLink = setContext(async (_, { headers = {} }: { headers?: Record<strin
 });
 // Create a WebSocket link for subscriptions
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'wss://mingle-point-debug.onrender.com/graphql',
+  url: 'wss://meeting-point-debug.onrender.com/graphql',
   connectionParams: async () => {
     const token = await getToken();
     console.log("token",token);

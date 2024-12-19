@@ -41,19 +41,17 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cors({
-    origin: 'https://mingle-point-debug.onrender.com/graphql', 
+    origin: 'https://meeting-point-debug.onrender.com', 
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'OPTIONS']
   }));
-  app.use((req, res, next) => {
-    if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Origin', 'https://mingle-point-debug.onrender.com/graphql');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-      res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-      res.sendStatus(200);
-    } else {
-      next();
-    }
+  app.options('*', (_req, res) => {
+    res.header('Access-Control-Allow-Origin', 'https://mingle-point-debug.onrender.com');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.sendStatus(200);
   });
 
   server.applyMiddleware({ app: app as unknown as ExpressContext['req']['app'], path: '/graphql' });
