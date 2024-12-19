@@ -28,22 +28,24 @@ const authLink = setContext(async (_, { headers = {} }: { headers?: Record<strin
   };
 });
 // Create a WebSocket link for subscriptions
-// const wsLink = new GraphQLWsLink(createClient({
-//   url: 'wss://mingle-point-debug.onrender.com/graphql',
-//   connectionParams: async () => {
-//     const token = await getToken(); 
-//     return {
-//       Authorization: `Bearer ${token}`,
-//     };
-//   },
-// }));
-
 const wsLink = new GraphQLWsLink(createClient({
   url: 'wss://mingle-point-debug.onrender.com/graphql',
   connectionParams: async () => {
-    return {};  // No token sent
+    const token = await getToken();
+    
+    // Only include the Authorization header if the token is available
+    if (token) {
+      return {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    
+    // No token available during signup, so return an empty object
+    return {};
   },
 }));
+
+
 
 // Split links based on operation type
 const splitLink = split(
