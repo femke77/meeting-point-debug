@@ -15,6 +15,7 @@ import jwt from 'jsonwebtoken';
 import { PubSub } from 'graphql-subscriptions';
 import cors from 'cors';
 dotenv.config();
+
 const pubsub:PubSub = new PubSub();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +23,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const httpServer = createServer(app);
 
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
@@ -39,13 +41,13 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cors({
-    origin: 'https://mingle-point-debug.onrender.com', 
+    origin: 'http://localhost:3001', 
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   }));
   app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Origin', 'https://mingle-point-debug.onrender.com');
+      res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
       res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.sendStatus(200);
@@ -70,15 +72,14 @@ const startApolloServer = async () => {
     server: httpServer,
     path: '/graphql',
   });
-  wsServer.on('headers', (headers, _request) => {
-    headers.push('Access-Control-Allow-Origin: https://mingle-point-debug.onrender.com');
-    headers.push('Access-Control-Allow-Credentials: true');
-  });
+  
   useServer({ schema,
     context: async (ctx) => {
       const { connectionParams } = ctx;
+      console.log("context hit");
       if (connectionParams && connectionParams.Authorization) {
         const token = (connectionParams.Authorization as string).replace("Bearer ", "").trim();
+        console.log("server token",token);
         
         try {
           const { data }: any = jwt.verify(token,  process.env.JWT_SECRET_KEY || "MySecret", {
