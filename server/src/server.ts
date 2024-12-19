@@ -41,13 +41,13 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cors({
-    origin: 'http://localhost:3001', 
+    origin: 'https://mingle-point-debug.onrender.com', 
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   }));
   app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+      res.header('Access-Control-Allow-Origin', 'https://mingle-point-debug.onrender.com');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
       res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.sendStatus(200);
