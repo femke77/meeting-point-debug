@@ -41,13 +41,13 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cors({
-    origin: 'https://mingle-point-debug.onrender.com', 
+    origin: 'https://mingle-point-debug.onrender.com/graphql', 
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   }));
   app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Origin', 'https://mingle-point-debug.onrender.com');
+      res.header('Access-Control-Allow-Origin', 'https://mingle-point-debug.onrender.com/graphql');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
       res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.sendStatus(200);
@@ -95,7 +95,7 @@ const startApolloServer = async () => {
   }, wsServer)
 
   httpServer.listen({ port: PORT }, () => {
-    console.log(`Server is now running on http://localhost:${PORT}/graphql`);
+    console.log(`Server is now running`);
   });
 };
 
